@@ -2,34 +2,71 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>スタンプラリー</title>
+  <title>くみまち スタンプラリー</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
     body {
+      margin: 0;
       font-family: sans-serif;
       text-align: center;
-      margin: 0;
-      padding: 20px;
-      background: #e6f4f1;
+      background: linear-gradient(#67b7dc, #7ec47a);
+      color: #333;
+    }
+
+    .screen {
+      min-height: 100vh;
+      padding: 24px 16px;
+      box-sizing: border-box;
     }
 
     h1 {
-      margin-bottom: 20px;
+      color: white;
+      margin-top: 20px;
+    }
+
+    .card {
+      background: #e8f6f3;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 320px;
+    }
+
+    .stamp-preview {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-width: 260px;
+      margin: 20px auto;
+    }
+
+    .stamp-preview img {
+      width: 70px;
+      height: 70px;
+    }
+
+    button {
+      background: #ffd84d;
+      border: none;
+      border-radius: 999px;
+      padding: 14px 28px;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
     }
 
     .stamps {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 16px;
-      max-width: 300px;
-      margin: 0 auto;
+      max-width: 320px;
+      margin: 30px auto;
     }
 
     .stamp {
-      background: #fff;
+      background: white;
       border-radius: 50%;
-      width: 90px;
       height: 90px;
       display: flex;
       align-items: center;
@@ -41,46 +78,81 @@
       height: 60px;
     }
 
+    .stamp.done img {
+      animation: pop 0.3s ease;
+    }
+
+    @keyframes pop {
+      from { transform: scale(0.6); }
+      to   { transform: scale(1); }
+    }
+
     #message {
-      margin-top: 20px;
+      color: white;
+      font-size: 18px;
       font-weight: bold;
+      margin-top: 20px;
     }
   </style>
 </head>
 
 <body>
 
-<h1>スタンプラリー</h1>
+<!-- ===== TOP画面 ===== -->
+<div id="top" class="screen">
+  <h1>くみまち<br>スタンプラリー</h1>
 
-<div class="stamps" id="stamps"></div>
+  <div class="card">
+    <strong>店内を回って<br>スタンプを集めよう！</strong>
+  </div>
 
-<div id="message">QRコードを読み取ってスタンプを集めよう</div>
+  <div class="stamp-preview">
+    images/stamp_empty.png
+    images/stamp_empty.png
+    images/stamp_empty.png
+    images/stamp_empty.png
+    images/stamp_empty.png
+  </div>
+
+  <button onclick="goStamp()">スタンプラリー帳へ</button>
+</div>
+
+<!-- ===== スタンプ帳 ===== -->
+<div id="stamp" class="screen" style="display:none;">
+  <h1>スタンプラリー</h1>
+  <div class="stamps" id="stamps"></div>
+  <div id="message">QRコードを読み取ってスタンプを集めよう</div>
+</div>
 
 <script>
   const TOTAL = 5;
 
-  // スタンプ状態を取得
+  function goStamp() {
+    document.getElementById("top").style.display = "none";
+    document.getElementById("stamp").style.display = "block";
+  }
+
   let stamps = JSON.parse(localStorage.getItem("stamps") || "[]");
   if (stamps.length !== TOTAL) {
     stamps = Array(TOTAL).fill(false);
   }
 
-  // URLパラメータ ?stamp=1〜5
-  const params = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(location.search);
   const num = Number(params.get("stamp"));
 
   if (num >= 1 && num <= TOTAL) {
     stamps[num - 1] = true;
     localStorage.setItem("stamps", JSON.stringify(stamps));
+    goStamp();
   }
 
-  // 表示
   const container = document.getElementById("stamps");
   stamps.forEach((done, i) => {
     const div = document.createElement("div");
-    div.className = "stamp";
+    div.className = "stamp" + (done ? " done" : "");
     div.innerHTML = done
-      ? `<img src="images/stamp${i + 1}.png`<img src="imagesty.png`;
+      ? `images/stamp${i + 1}.png`
+      : `images/stamp_empty.png`;
     container.appendChild(div);
   });
 
