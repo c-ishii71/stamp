@@ -47,12 +47,26 @@
       display: none;
     }
 
+    .stamps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 320px;
+      margin: 30px auto;
+    }
+
     .stamp {
       background: white;
-      margin: 10px auto;
-      padding: 12px;
-      max-width: 200px;
-      border-radius: 10px;
+      border-radius: 50%;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stamp img {
+      width: 60px;
+      height: 60px;
     }
   </style>
 </head>
@@ -73,7 +87,7 @@
 <!-- スタンプ帳 -->
 <div id="stamp" class="screen">
   <h1>スタンプ帳</h1>
-  <div id="stamps"></div>
+  <div id="stamps" class="stamps"></div>
 </div>
 
 <script>
@@ -88,14 +102,41 @@
   function renderStamps() {
     const container = document.getElementById("stamps");
     container.innerHTML = "";
+
+    let stamps = JSON.parse(localStorage.getItem("stamps") || "[]");
+    if (stamps.length !== TOTAL) {
+      stamps = Array(TOTAL).fill(false);
+    }
+
     for (let i = 1; i <= TOTAL; i++) {
       const div = document.createElement("div");
       div.className = "stamp";
-      div.textContent = "スタンプ " + i;
+
+      const img = document.createElement("img");
+      img.src = stamps[i - 1]
+        ? `画像/stamp${i}.png`
+        : `画像/stamp_empty.png`;
+
+      div.appendChild(img);
       container.appendChild(div);
     }
+  }
+
+  // QR (?stamp=1〜5) で来た場合
+  const params = new URLSearchParams(location.search);
+  const num = Number(params.get("stamp"));
+
+  if (num >= 1 && num <= TOTAL) {
+    let stamps = JSON.parse(localStorage.getItem("stamps") || "[]");
+    if (stamps.length !== TOTAL) {
+      stamps = Array(TOTAL).fill(false);
+    }
+    stamps[num - 1] = true;
+    localStorage.setItem("stamps", JSON.stringify(stamps));
+    goStamp();
   }
 </script>
 
 </body>
 </html>
+
