@@ -127,35 +127,37 @@
 <script>
   const TOTAL = 5;
 
-  function goStamp() {
-    document.getElementById("top").style.display = "none";
-    document.getElementById("stamp").style.display = "block";
-  }
+function goStamp() {
+  document.getElementById("top").style.display = "none";
+  document.getElementById("stamp").style.display = "block";
+}
 
-  let stamps = JSON.parse(localStorage.getItem("stamps") || "[]");
-  if (stamps.length !== TOTAL) {
-    stamps = Array(TOTAL).fill(false);
-  }
+let stamps = JSON.parse(localStorage.getItem("stamps") || "[]");
+if (stamps.length !== TOTAL) {
+  stamps = Array(TOTAL).fill(false);
+}
 
-  const params = new URLSearchParams(location.search);
-  const num = Number(params.get("stamp"));
+const params = new URLSearchParams(location.search);
+const num = Number(params.get("stamp"));
 
-  if (num >= 1 && num <= TOTAL) {
-    stamps[num - 1] = true;
-    localStorage.setItem("stamps", JSON.stringify(stamps));
-    goStamp();
-  }
+if (num >= 1 && num <= TOTAL) {
+  stamps[num - 1] = true;
+  localStorage.setItem("stamps", JSON.stringify(stamps));
+  goStamp();
+}
 
-  const container = document.getElementById("stamps");
-  stamps.forEach((done, i) => {
-    const div = document.createElement("div");
-    div.className = "stamp" + (done ? " done" : "");
- 　 div.innerHTML = done
-　  ? `<img src="images/stamp${i + 1}.png" alt="スタンプ${i + 1}_empty.png" alt="未取得スタンプ
-  });
+const container = document.getElementById("stamps");
+stamps.forEach((done, i) => {
+  const div = document.createElement("div");
+  div.className = "stamp" + (done ? " done" : "");
+  div.innerHTML = done
+    ? `images/stamp${i + 1}.png`
+    : `<img src="images/stamp_empty.png" alt="未取得スタhild(div);
+});
 
-  if (stamps.every(Boolean)) {
-    document.getElementById("message").textContent = "🎉 5つそろいました！";
+if (stamps.every(Boolean)) {
+  document.getElementById("message").textContent = "🎉 5つそろいました！";
+}
   }
 </script>
 
