@@ -26,7 +26,7 @@
       line-height: 1.4;
     }
 
-    /* --- TOP画面 --- */
+    /* ---------- TOP画面 ---------- */
     .card {
       background: #e8f6f3;
       border-radius: 16px;
@@ -43,12 +43,9 @@
       margin: 20px auto;
     }
 
-    .stamp-preview div {
-      background: white;
-      border-radius: 50%;
-      padding: 22px 0;
-      font-size: 28px;
-      color: #bbb;
+    .stamp-preview img {
+      width: 70px;
+      height: 70px;
     }
 
     button {
@@ -61,15 +58,7 @@
       cursor: pointer;
     }
 
-    .sub-link {
-      display: block;
-      margin-top: 16px;
-      color: white;
-      text-decoration: underline;
-      font-size: 14px;
-    }
-
-    /* --- スタンプ帳 --- */
+    /* ---------- スタンプ帳 ---------- */
     .stamps {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -85,14 +74,20 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
-      color: #ccc;
     }
 
-    .stamp.done {
-      background: #e7fbe7;
-      color: #2e7d32;
-      font-weight: bold;
+    .stamp img {
+      width: 60px;
+      height: 60px;
+    }
+
+    .stamp.done img {
+      animation: pop 0.3s ease;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.6); }
+      100% { transform: scale(1); }
     }
 
     #message {
@@ -116,23 +111,20 @@
   </div>
 
   <div class="stamp-preview">
-    <div>？</div><div>？</div><div>？</div>
-    <div>？</div><div>？</div>
+    <img src="images/stamp_empty.png">
+    <img src="images/stamp_empty.png">
+    <img src="images/stamp_empty.png">
+    <img src="images/stamp_empty.png">
+    <img src="images/stamp_empty.png">
   </div>
 
   <button onclick="goStamp()">スタンプラリー帳へ</button>
-
-  <a class="sub-link" href="#" onclick="alert('https://kumimachi.com/')">
-    くみまちの活動についてはこちら
-  </a>
 </div>
 
 <!-- ================= スタンプ帳画面 ================= -->
 <div id="stamp" class="screen" style="display:none;">
   <h1>スタンプラリー</h1>
-
   <div class="stamps" id="stamps"></div>
-
   <div id="message">QRコードを読み取ってスタンプを集めよう</div>
 </div>
 
@@ -155,26 +147,18 @@
   if (num >= 1 && num <= TOTAL) {
     stamps[num - 1] = true;
     localStorage.setItem("stamps", JSON.stringify(stamps));
-    goStamp(); // QRから来たら自動で帳画面へ
+    goStamp();
   }
 
   const container = document.getElementById("stamps");
   stamps.forEach((done, i) => {
     const div = document.createElement("div");
-    div.className = "stamp" + (done ? " done" : "");
-    div.textContent = done ? (i + 1) : "？";
-    container.appendChild(div);
-  });
-
-  if (stamps.every(Boolean)) {
+    div.className = "stamp";
+    div.innerHTML = done
+      ? `<img src="images/stamp${i + 1}.png" alt="スタンプ${i + 1every(Boolean)) {
     document.getElementById("message").textContent = "🎉 5つそろいました！";
   }
 </script>
 
 </body>
 </html>
-``
-
-</body>
-</html>
-
