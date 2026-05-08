@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>スタンプラリー</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+      background: #e6f4f1;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .stamps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    .stamp {
+      background: #fff;
+      border-radius: 50%;
+      width: 90px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stamp img {
+      width: 60px;
+      height: 60px;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>スタンプラリー</h1>
+
+<div class="stamps" id="stamps"></div>
+
+<div id="message">QRコードを読み取ってスタンプを集めよう</div>
+
+<script>
+  const TOTAL = 5;
+
+  // スタンプ状態を取得
+  let stamps = JSON.parse(localStorage.getItem("stamps") || "[]");
+  if (stamps.length !== TOTAL) {
+    stamps = Array(TOTAL).fill(false);
+  }
+
+  // URLパラメータ ?stamp=1〜5
+  const params = new URLSearchParams(window.location.search);
+  const num = Number(params.get("stamp"));
+
+  if (num >= 1 && num <= TOTAL) {
+    stamps[num - 1] = true;
+    localStorage.setItem("stamps", JSON.stringify(stamps));
+  }
+
+  // 表示
+  const container = document.getElementById("stamps");
+  stamps.forEach((done, i) => {
+    const div = document.createElement("div");
+    div.className = "stamp";
+    div.innerHTML = done
+      ? `<img src="images/stamp${i + 1}.png`<img src="imagesty.png`;
+    container.appendChild(div);
+  });
+
+  if (stamps.every(Boolean)) {
+    document.getElementById("message").textContent = "🎉 5つそろいました！";
+  }
+</script>
+
+</body>
+</html>
