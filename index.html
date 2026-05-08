@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>くみまち スタンプラリー</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: sans-serif; text-align: center; margin: 0; }
+    #stamp { display: none; }
+    .stamp { border: 1px solid #ccc; padding: 20px; margin: 10px; }
+  </style>
+</head>
+
+<body>
+
+<div id="top">
+  <h1>TOP</h1>
+  <button onclick="goStamp()">スタンプラリー帳へ</button>
+</div>
+
+<div id="stamp">
+  <h1>スタンプ帳</h1>
+  <div id="stamps"></div>
+</div>
+
+<script>
+  const TOTAL = 5;
+
+  function goStamp() {
+    document.getElementById("top").style.display = "none";
+    document.getElementById("stamp").style.display = "block";
+    renderStamps();
+  }
+
+  function renderStamps() {
+    const container = document.getElementById("stamps");
+    container.innerHTML = "";
+    for (let i = 1; i <= TOTAL; i++) {
+      const div = document.createElement("div");
+      div.className = "stamp";
+      div.textContent = "スタンプ" + i;
+      container.appendChild(div);
+    }
+  }
+</script>
+
+</body>
+</html>
