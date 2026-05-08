@@ -1,0 +1,55 @@
+import { useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { CheckCircle2 } from "lucide-react";
+
+const STAMP_COUNT = 5;
+
+export default function StampRally() {
+  const [stamps, setStamps] = useState(Array(STAMP_COUNT).fill(false));
+
+  useEffect(() => {
+    // localStorageから復元
+    const saved = JSON.parse(localStorage.getItem("stamps") || "[]");
+    if (saved.length === STAMP_COUNT) setStamps(saved);
+
+    // URLパラメータ取得 (?stamp=1〜5)
+    const params = new URLSearchParams(window.location.search);
+    const stampNum = parseInt(params.get("stamp"), 10);
+
+    if (stampNum >= 1 && stampNum <= STAMP_COUNT) {
+      const updated = [...(saved.length === STAMP_COUNT ? saved : stamps)];
+      updated[stampNum - 1] = true;
+      setStamps(updated);
+      localStorage.setItem("stamps", JSON.stringify(updated));
+    }
+  }, []);
+
+  const completed = stamps.every(Boolean);
+
+  return (
+    <div className="min-h-screen bg-slate-50 p-6 max-w-md mx-auto">
+      <h1 className="text-xl font-bold text-center mb-4">スタンプラリー</h1>
+
+      <div className="grid grid-cols-5 gap-2 mb-6">
+        {stamps.map((has, idx) => (
+          <Card key={idx} className={`text-center ${has ? "bg-green-100" : "bg-white"}`}>
+            <CardContent className="p-3">
+              <div className="text-sm">{idx + 1}</div>
+              {has ? (
+                <CheckCircle2 className="mx-auto text-green-600" />
+              ) : (
+                <div className="w-6 h-6 mx-auto border border-dashed rounded-full" />
+              )}
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {completed ? (
+        <div className="text-center text-green-700 font-bold">\n🎉 5つそろいました！コンプリート！\n</div>
+      ) : (
+        <div className="text-center text-slate-600">QRコードを読み取ってスタンプを集めよう</div>
+      )}
+    </div>
+  );
+}
