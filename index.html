@@ -23,8 +23,10 @@
     h1 {
       color: white;
       margin-top: 20px;
+      line-height: 1.4;
     }
 
+    /* --- TOP画面 --- */
     .card {
       background: #e8f6f3;
       border-radius: 16px;
@@ -41,9 +43,12 @@
       margin: 20px auto;
     }
 
-    .stamp-preview img {
-      width: 70px;
-      height: 70px;
+    .stamp-preview div {
+      background: white;
+      border-radius: 50%;
+      padding: 22px 0;
+      font-size: 28px;
+      color: #bbb;
     }
 
     button {
@@ -56,6 +61,15 @@
       cursor: pointer;
     }
 
+    .sub-link {
+      display: block;
+      margin-top: 16px;
+      color: white;
+      text-decoration: underline;
+      font-size: 14px;
+    }
+
+    /* --- スタンプ帳 --- */
     .stamps {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -71,56 +85,54 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 28px;
+      color: #ccc;
     }
 
-    .stamp img {
-      width: 60px;
-      height: 60px;
-    }
-
-    .stamp.done img {
-      animation: pop 0.3s ease;
-    }
-
-    @keyframes pop {
-      from { transform: scale(0.6); }
-      to   { transform: scale(1); }
+    .stamp.done {
+      background: #e7fbe7;
+      color: #2e7d32;
+      font-weight: bold;
     }
 
     #message {
       color: white;
       font-size: 18px;
-      font-weight: bold;
       margin-top: 20px;
+      font-weight: bold;
     }
   </style>
 </head>
 
 <body>
 
-<!-- ===== TOP画面 ===== -->
+<!-- ================= TOP画面 ================= -->
 <div id="top" class="screen">
   <h1>くみまち<br>スタンプラリー</h1>
 
   <div class="card">
-    <strong>店内を回って<br>スタンプを集めよう！</strong>
+    <p><strong>店内を回って<br>スタンプを集めよう！</strong></p>
+    <small>スタンプは店内の<br>いろいろなところにあるよ！</small>
   </div>
 
-<div class="stamp-preview">
-  <img src="images/stamp_empty.png" alt="">
-  <img src="images/stamp_empty.png" alt="">
-  <img src="images/stamp_empty.png" alt="">
-  <img src="images/stamp_empty.png" alt="">
-  <img src="images/stamp_empty.png" alt="">
-</div>
+  <div class="stamp-preview">
+    <div>？</div><div>？</div><div>？</div>
+    <div>？</div><div>？</div>
+  </div>
 
   <button onclick="goStamp()">スタンプラリー帳へ</button>
+
+  #">
+    くみまちの活動についてはこちら
+  </a>
 </div>
 
-<!-- ===== スタンプ帳 ===== -->
+<!-- ================= スタンプ帳画面 ================= -->
 <div id="stamp" class="screen" style="display:none;">
   <h1>スタンプラリー</h1>
+
   <div class="stamps" id="stamps"></div>
+
   <div id="message">QRコードを読み取ってスタンプを集めよう</div>
 </div>
 
@@ -143,20 +155,24 @@
   if (num >= 1 && num <= TOTAL) {
     stamps[num - 1] = true;
     localStorage.setItem("stamps", JSON.stringify(stamps));
-    goStamp();
+    goStamp(); // QRから来たら自動で帳画面へ
   }
 
   const container = document.getElementById("stamps");
   stamps.forEach((done, i) => {
     const div = document.createElement("div");
     div.className = "stamp" + (done ? " done" : "");
-    div.innerHTML = done
-      ? `<img src="images/stamp${i + 1}.png});
+    div.textContent = done ? (i + 1) : "？";
+    container.appendChild(div);
+  });
 
   if (stamps.every(Boolean)) {
     document.getElementById("message").textContent = "🎉 5つそろいました！";
   }
 </script>
+
+</body>
+</html>
 
 </body>
 </html>
