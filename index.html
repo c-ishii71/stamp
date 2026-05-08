@@ -150,9 +150,8 @@
   stamps.forEach((done, i) => {
     const div = document.createElement("div");
     div.className = "stamp" + (done ? " done" : "");
-    div.innerHTML = done
-  　? `<img src="images/stamp${i + 1}.png" alt="スタンプ${i + 1}_empty.png" alt="未取得スタンプ
-    container.appendChild(div);
+ 　 div.innerHTML = done
+　  ? `<img src="images/stamp${i + 1}.png" alt="スタンプ${i + 1}_empty.png" alt="未取得スタンプ
   });
 
   if (stamps.every(Boolean)) {
