@@ -1,55 +1,50 @@
-import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle2 } from "lucide-react";
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>スタンプラリー</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: sans-serif; background:#f8fafc; text-align:center; }
+    .stamps { display:grid; grid-template-columns: repeat(5, 1fr); gap:10px; max-width:320px; margin:20px auto; }
+    .stamp { border:2px dashed #ccc; padding:15px; border-radius:10px; }
+    .done { background:#dcfce7; border-color:#22c55e; }
+  </style>
+</head>
+<body>
 
-const STAMP_COUNT = 5;
+<h1>スタンプラリー</h1>
 
-export default function StampRally() {
-  const [stamps, setStamps] = useState(Array(STAMP_COUNT).fill(false));
+<div class="stamps" id="stamps"></div>
 
-  useEffect(() => {
-    // localStorageから復元
-    const saved = JSON.parse(localStorage.getItem("stamps") || "[]");
-    if (saved.length === STAMP_COUNT) setStamps(saved);
+<p id="message">QRコードを読み取ってスタンプを集めよう</p>
 
-    // URLパラメータ取得 (?stamp=1〜5)
-    const params = new URLSearchParams(window.location.search);
-    const stampNum = parseInt(params.get("stamp"), 10);
+<script>
+  const TOTAL = 5;
+  let stamps = JSON.parse(localStorage.getItem("stamps") || "[]");
+  if (stamps.length !== TOTAL) stamps = Array(TOTAL).fill(false);
 
-    if (stampNum >= 1 && stampNum <= STAMP_COUNT) {
-      const updated = [...(saved.length === STAMP_COUNT ? saved : stamps)];
-      updated[stampNum - 1] = true;
-      setStamps(updated);
-      localStorage.setItem("stamps", JSON.stringify(updated));
-    }
-  }, []);
+  const params = new URLSearchParams(location.search);
+  const num = Number(params.get("stamp"));
 
-  const completed = stamps.every(Boolean);
+  if (num >= 1 && num <= TOTAL) {
+    stamps[num - 1] = true;
+    localStorage.setItem("stamps", JSON.stringify(stamps));
+  }
 
-  return (
-    <div className="min-h-screen bg-slate-50 p-6 max-w-md mx-auto">
-      <h1 className="text-xl font-bold text-center mb-4">スタンプラリー</h1>
+  const container = document.getElementById("stamps");
+  stamps.forEach((s, i) => {
+    const div = document.createElement("div");
+    div.className = "stamp" + (s ? " done" : "");
+    div.innerHTML = s ? `✅ ${i+1}` : `⬜ ${i+1}`;
+    container.appendChild(div);
+  });
 
-      <div className="grid grid-cols-5 gap-2 mb-6">
-        {stamps.map((has, idx) => (
-          <Card key={idx} className={`text-center ${has ? "bg-green-100" : "bg-white"}`}>
-            <CardContent className="p-3">
-              <div className="text-sm">{idx + 1}</div>
-              {has ? (
-                <CheckCircle2 className="mx-auto text-green-600" />
-              ) : (
-                <div className="w-6 h-6 mx-auto border border-dashed rounded-full" />
-              )}
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+  if (stamps.every(Boolean)) {
+    document.getElementById("message").textContent = "🎉 5つ集まりました！";
+  }
+</script>
 
-      {completed ? (
-        <div className="text-center text-green-700 font-bold">\n🎉 5つそろいました！コンプリート！\n</div>
-      ) : (
-        <div className="text-center text-slate-600">QRコードを読み取ってスタンプを集めよう</div>
-      )}
-    </div>
-  );
-}
+</body>
+</html>
+
