@@ -127,38 +127,49 @@
 <script>
   const TOTAL = 5;
 
-function goStamp() {
-  document.getElementById("top").style.display = "none";
-  document.getElementById("stamp").style.display = "block";
-}
-
-let stamps = JSON.parse(localStorage.getItem("stamps") || "[]");
-if (stamps.length !== TOTAL) {
-  stamps = Array(TOTAL).fill(false);
-}
-
-const params = new URLSearchParams(location.search);
-const num = Number(params.get("stamp"));
-
-if (num >= 1 && num <= TOTAL) {
-  stamps[num - 1] = true;
-  localStorage.setItem("stamps", JSON.stringify(stamps));
-  goStamp();
-}
-
-const container = document.getElementById("stamps");
-stamps.forEach((done, i) => {
-  const div = document.createElement("div");
-  div.className = "stamp" + (done ? " done" : "");
-  div.innerHTML = done
-    ? `images/stamp${i + 1}.png`
-    : `<img src="images/stamp_empty.png" alt="未取得スタhild(div);
-});
-
-if (stamps.every(Boolean)) {
-  document.getElementById("message").textContent = "🎉 5つそろいました！";
-}
+  function goStamp() {
+    document.getElementById("top").style.display = "none";
+    document.getElementById("stamp").style.display = "block";
+    renderStamps(); // ← スタンプ帳を開いた時に描画
   }
+
+  function renderStamps() {
+    const container = document.getElementById("stamps");
+    if (!container) return; // 念のための安全装置
+
+    container.innerHTML = "";
+
+    let stamps = JSON.parse(localStorage.getItem("stamps") || "[]");
+    if (stamps.length !== TOTAL) {
+      stamps = Array(TOTAL).fill(false);
+    }
+
+    stamps.forEach((done, i) => {
+      const div = document.createElement("div");
+      div.className = "stamp" + (done ? " done" : "");
+      div.innerHTML = done
+        ? `<img src="images/stamp${i + 1}.png" alt="スタンプ${images/stamp_empty.png" alt="未取得ppendChild(div);
+    });
+
+    if (stamps.every(Boolean)) {
+      document.getElementById("message").textContent = "🎉 5つそろいました！";
+    }
+  }
+
+  // QRコード (?stamp=1〜5) で来た場合
+  const params = new URLSearchParams(location.search);
+  const num = Number(params.get("stamp"));
+
+  if (num >= 1 && num <= TOTAL) {
+    let stamps = JSON.parse(localStorage.getItem("stamps") || "[]");
+    if (stamps.length !== TOTAL) {
+      stamps = Array(TOTAL).fill(false);
+    }
+    stamps[num - 1] = true;
+    localStorage.setItem("stamps", JSON.stringify(stamps));
+    goStamp(); // QRから来たら直接スタンプ帳
+  }
+                                                          
 </script>
 
 </body>
