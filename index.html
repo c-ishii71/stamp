@@ -23,10 +23,8 @@
     h1 {
       color: white;
       margin-top: 20px;
-      line-height: 1.4;
     }
 
-    /* ---------- TOP画面 ---------- */
     .card {
       background: #e8f6f3;
       border-radius: 16px;
@@ -58,7 +56,6 @@
       cursor: pointer;
     }
 
-    /* ---------- スタンプ帳 ---------- */
     .stamps {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -86,43 +83,41 @@
     }
 
     @keyframes pop {
-      0% { transform: scale(0.6); }
-      100% { transform: scale(1); }
+      from { transform: scale(0.6); }
+      to   { transform: scale(1); }
     }
 
     #message {
       color: white;
       font-size: 18px;
-      margin-top: 20px;
       font-weight: bold;
+      margin-top: 20px;
     }
   </style>
 </head>
 
 <body>
 
-<!-- ================= TOP画面 ================= -->
+<!-- ===== TOP画面 ===== -->
 <div id="top" class="screen">
   <h1>くみまち<br>スタンプラリー</h1>
 
   <div class="card">
-    <p><strong>店内を回って<br>スタンプを集めよう！</strong></p>
-    <small>スタンプは店内の<br>いろいろなところにあるよ！</small>
+    <strong>店内を回って<br>スタンプを集めよう！</strong>
   </div>
 
-<div class="stamp-preview">
-  <img src="images/stamp_empty.png" alt="">
-  <img src="images/stamp_empty.png" alt="">
-  <img src="images/stamp_empty.png" alt="">
-  <img src="images/stamp_empty.png" alt="">
-  <img src="images/stamp_empty.png" alt="">
-</div>
-
+  <div class="stamp-preview">
+    <img src="images/stamp_empty.png">
+    <img src="images/stamp_empty.png">
+    <img src="images/stamp_empty.png">
+    <img src="images/stamp_empty.png">
+    <img src="images/stamp_empty.png">
+  </div>
 
   <button onclick="goStamp()">スタンプラリー帳へ</button>
 </div>
 
-<!-- ================= スタンプ帳画面 ================= -->
+<!-- ===== スタンプ帳 ===== -->
 <div id="stamp" class="screen" style="display:none;">
   <h1>スタンプラリー</h1>
   <div class="stamps" id="stamps"></div>
@@ -154,9 +149,11 @@
   const container = document.getElementById("stamps");
   stamps.forEach((done, i) => {
     const div = document.createElement("div");
-    div.className = "stamp";
+    div.className = "stamp" + (done ? " done" : "");
     div.innerHTML = done
-      ? `<img src="images/stamp${i + 1}.png" alt="スタンプ${i + 1every(Boolean)) {
+      ? `<img src="images/stamp${i + 1}.png});
+
+  if (stamps.every(Boolean)) {
     document.getElementById("message").textContent = "🎉 5つそろいました！";
   }
 </script>
